@@ -6,7 +6,6 @@ import (
 
 	"github.com/lsherman98/pbenv/pb_hooks/system"
 	"github.com/pocketbase/dbx"
-	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/template"
 	"github.com/pocketbase/pocketbase/tools/types"
@@ -59,11 +58,6 @@ func renderStatsPageHandler(e *core.RequestEvent) error {
 }
 
 func getStatsHandler(e *core.RequestEvent) error {
-	authHeader := e.Request.Header.Get("Authorization")
-	if authHeader == "" || !e.Auth.IsSuperuser() {
-		return apis.NewApiError(403, "forbidden", nil)
-	}
-
 	stats, err := system.GetStats()
 	if err != nil {
 		return e.InternalServerError("failed to retrieve stats", err)
@@ -73,11 +67,6 @@ func getStatsHandler(e *core.RequestEvent) error {
 }
 
 func getHistoricalStatsHandler(e *core.RequestEvent) error {
-	authHeader := e.Request.Header.Get("Authorization")
-	if authHeader == "" || !e.Auth.IsSuperuser() {
-		return apis.NewApiError(403, "forbidden", nil)
-	}
-
 	var cutoff time.Time
 	period := e.Request.URL.Query().Get("period")
 	switch period {

@@ -1,3 +1,4 @@
 .env
 go.sum
 /pb_data
+.DS_Store

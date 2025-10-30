@@ -7,7 +7,6 @@ import (
 	"os"
 	"strings"
 
-	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/template"
 )
@@ -30,11 +29,6 @@ func renderEnvPageHandler(e *core.RequestEvent) error {
 }
 
 func addEnvHandler(e *core.RequestEvent) error {
-	authHeader := e.Request.Header.Get("Authorization")
-	if authHeader == "" || !e.Auth.IsSuperuser() {
-		return e.UnauthorizedError("forbidden", nil)
-	}
-
 	var newVar EnvVar
 	if err := e.BindBody(&newVar); err != nil {
 		return e.BadRequestError("invalid request body", err)
@@ -72,11 +66,6 @@ func addEnvHandler(e *core.RequestEvent) error {
 }
 
 func updateEnvHandler(e *core.RequestEvent) error {
-	authHeader := e.Request.Header.Get("Authorization")
-	if authHeader == "" || !e.Auth.IsSuperuser() {
-		return apis.NewApiError(403, "forbidden", nil)
-	}
-
 	key := e.Request.PathValue("key")
 	if key == "" {
 		return e.BadRequestError("key is required", nil)
@@ -121,11 +110,6 @@ func updateEnvHandler(e *core.RequestEvent) error {
 }
 
 func deleteEnvHandler(e *core.RequestEvent) error {
-	authHeader := e.Request.Header.Get("Authorization")
-	if authHeader == "" || !e.Auth.IsSuperuser() {
-		return apis.NewApiError(403, "forbidden", nil)
-	}
-
 	key := e.Request.PathValue("key")
 	if key == "" {
 		return e.BadRequestError("key is required", nil)
@@ -165,11 +149,6 @@ func deleteEnvHandler(e *core.RequestEvent) error {
 }
 
 func getEnvsHandler(e *core.RequestEvent) error {
-	authHeader := e.Request.Header.Get("Authorization")
-	if authHeader == "" || !e.Auth.IsSuperuser() {
-		return apis.NewApiError(403, "forbidden", nil)
-	}
-
 	envVars, err := readEnvFile()
 	if err != nil {
 		return e.BadRequestError("failed to read environment variables", err)
