@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"net/http"
 	"os"
 	"os/exec"
 	"strings"
@@ -29,7 +30,7 @@ func restartHandler(e *core.RequestEvent) error {
 			return e.InternalServerError("could not find RESTART_CMD env variable", nil)
 		}
 
-		e.JSON(200, nil)
+		e.JSON(http.StatusOK, nil)
 		routine.FireAndForget(func() {
 			time.Sleep(2 * time.Second)
 			args := strings.Split(restartCmd, " ")
