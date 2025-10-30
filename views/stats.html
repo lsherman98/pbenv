@@ -480,7 +480,17 @@ monitoring of system performance{{end}} {{define "body"}}
       },
       options: {
         responsive: true,
-        scales: { ...scales, y: { type: "logarithmic" } },
+        scales: { 
+          ...scales, 
+          y: { 
+            type: "logarithmic", 
+            ticks: {
+              callback: (v) => `${v}%`,
+              autoSkip: true,
+              maxTicksLimit: 12, 
+            },
+          },
+        },
         plugins: {
           title: { display: true },
           tooltip: {
@@ -528,7 +538,14 @@ monitoring of system performance{{end}} {{define "body"}}
           pointRadius: 0,
         },
       ];
-      yAxis = { type: "logarithmic" };
+      yAxis = { 
+        type: "logarithmic", 
+        ticks: {
+          callback: (v) => `${v}%`,
+          autoSkip: true,
+          maxTicksLimit: 12, 
+        },
+      };
       tooltipCallbacks = { label: (c) => `${c.datasetIndex === 0 ? "System" : "Process"}: ${c.parsed.y.toFixed(2)}%` };
     } else {
       datasets = [
@@ -599,7 +616,15 @@ monitoring of system performance{{end}} {{define "body"}}
           pointRadius: 0,
         },
       ];
-      yAxis = { beginAtZero: true, max: 100 };
+      yAxis = { 
+        beginAtZero: true, 
+        max: 100,
+        ticks: {
+          callback: (v) => `${v}%`,
+          autoSkip: true,
+          maxTicksLimit: 12, 
+        },
+      };
       tooltipCallbacks = { label: (c) => (c.parsed.y !== null ? `System Disk Usage: ${c.parsed.y.toFixed(2)}%` : "") };
     } else {
       datasets = [
