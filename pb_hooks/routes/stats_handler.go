@@ -19,11 +19,12 @@ type HistoricalCPU struct {
 }
 
 type HistoricalMemory struct {
-	Used           float64        `json:"used"`
-	Total          float64        `json:"total"`
-	Usage          float64        `json:"usage"`
-	ProcessPercent float32        `json:"process_percent"`
-	Created        types.DateTime `json:"created"`
+	Used            float64        `json:"used"`
+	Total           float64        `json:"total"`
+	Usage           float64        `json:"usage"`
+	ProcessPercent  float32        `json:"process_percent"`
+	ProcessAbsolute float64        `json:"process_absolute"`
+	Created         types.DateTime `json:"created"`
 }
 
 type HistoricalDisk struct {
@@ -125,11 +126,12 @@ func getHistoricalStatsHandler(e *core.RequestEvent) error {
 		})
 
 		memoryStats = append(memoryStats, HistoricalMemory{
-			Total:          float64(stats.Memory.Total),
-			Usage:          stats.Memory.UsedPercent,
-			Used:           float64(stats.Memory.Used),
-			ProcessPercent: stats.ProcessMemoryPercent,
-			Created:        created,
+			Total:           float64(stats.Memory.Total),
+			Usage:           stats.Memory.UsedPercent,
+			Used:            float64(stats.Memory.Used),
+			ProcessPercent:  stats.ProcessMemoryPercent,
+			ProcessAbsolute: stats.ProcessMemoryAbsolute,
+			Created:         created,
 		})
 
 		diskStats = append(diskStats, HistoricalDisk{

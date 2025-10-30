@@ -542,9 +542,28 @@ monitoring of system performance{{end}} {{define "body"}}
           tension: 0.1,
           pointRadius: 0,
         },
+        {
+          label: "Process Memory Usage",
+          data: insertNullsForGaps(reversedData, "process_absolute"),
+          borderColor: "rgba(75, 192, 192, 1)",
+          backgroundColor: processGradient,
+          borderWidth: 1,
+          fill: true,
+          tension: 0.1,
+          pointRadius: 0,
+        },
       ];
-      yAxis = { type: "logarithmic", ticks: { callback: (v) => formatBytes(v) } };
-      tooltipCallbacks = { label: (c) => `System: ${formatBytes(c.parsed.y)}` };
+      yAxis = {
+        beginAtZero: true,
+        max: reversedData[0]?.total,
+        type: "logarithmic",
+        ticks: {
+          callback: (v) => formatBytes(v),
+          autoSkip: true,
+          maxTicksLimit: 12, 
+        }
+      };
+      tooltipCallbacks = { label: (c) => `${c.datasetIndex === 0 ? "System" : "Process"}: ${formatBytes(c.parsed.y)}` };
     }
 
     memoryChart = new Chart(ctx, {
