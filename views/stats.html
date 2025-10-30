@@ -604,7 +604,7 @@ monitoring of system performance{{end}} {{define "body"}}
     } else {
       datasets = [
         {
-          label: "Disk Usage",
+          label: "System Disk Usage",
           data: insertNullsForGaps(reversedData, "used"),
           borderColor: "rgba(153, 102, 255, 1)",
           backgroundColor: gradient,
