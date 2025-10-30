@@ -38,3 +38,7 @@ When `DEV` is `true`, the restart hook just kills the current process.
 Inspired by:
 - [pb-ext](https://github.com/magooney-loon/pb-ext)
 - [pb-hooks-dash](https://github.com/deselected/pb-hooks-dash)
+
+
+<img width="2918" height="1894" alt="127 0 0 1_8090___env" src="https://github.com/user-attachments/assets/b1d5aee0-bafc-48b0-b30a-2e62319c4fdc" />
+<img width="3420" height="3054" alt="screencapture-127-0-0-1-8090-stats-2025-10-30-15_04_38" src="https://github.com/user-attachments/assets/82694a0f-f663-44f5-b068-eedfec9fe800" />
