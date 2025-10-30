@@ -4,39 +4,13 @@ import (
 	"encoding/json"
 	"time"
 
-	"github.com/lsherman98/yt-rss/pocketbase/collections"
-	"github.com/lsherman98/yt-rss/pocketbase/system"
+	"github.com/lsherman98/pbenv/pb_hooks/system"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase/apis"
 	"github.com/pocketbase/pocketbase/core"
 	"github.com/pocketbase/pocketbase/tools/template"
 	"github.com/pocketbase/pocketbase/tools/types"
 )
-
-func renderStatsPageHandler(e *core.RequestEvent) error {
-	html, err := template.NewRegistry().LoadFiles(
-		"views/layout.html",
-		"views/stats.html",
-	).Render(nil)
-	if err != nil {
-		return e.BadRequestError("failed to load html", err)
-	}
-	return e.HTML(200, html)
-}
-
-func getStatsHandler(e *core.RequestEvent) error {
-	authHeader := e.Request.Header.Get("Authorization")
-	if authHeader == "" || !e.Auth.IsSuperuser() {
-		return apis.NewApiError(403, "forbidden", nil)
-	}
-
-	stats, err := system.GetStats()
-	if err != nil {
-		return e.InternalServerError("failed to retrieve stats", err)
-	}
-
-	return e.JSON(200, stats)
-}
 
 type HistoricalCPU struct {
 	Percent        float64        `json:"percent"`
@@ -72,14 +46,39 @@ type HistoricalStats struct {
 	Runtime []HistoricalRuntime `json:"runtime"`
 }
 
+func renderStatsPageHandler(e *core.RequestEvent) error {
+	html, err := template.NewRegistry().LoadFiles(
+		"views/layout.html",
+		"views/stats.html",
+	).Render(nil)
+	if err != nil {
+		return e.BadRequestError("failed to load html", err)
+	}
+	return e.HTML(200, html)
+}
+
+func getStatsHandler(e *core.RequestEvent) error {
+	authHeader := e.Request.Header.Get("Authorization")
+	if authHeader == "" || !e.Auth.IsSuperuser() {
+		return apis.NewApiError(403, "forbidden", nil)
+	}
+
+	stats, err := system.GetStats()
+	if err != nil {
+		return e.InternalServerError("failed to retrieve stats", err)
+	}
+
+	return e.JSON(200, stats)
+}
+
 func getHistoricalStatsHandler(e *core.RequestEvent) error {
 	authHeader := e.Request.Header.Get("Authorization")
 	if authHeader == "" || !e.Auth.IsSuperuser() {
 		return apis.NewApiError(403, "forbidden", nil)
 	}
 
-	period := e.Request.URL.Query().Get("period")
 	var cutoff time.Time
+	period := e.Request.URL.Query().Get("period")
 	switch period {
 	case "hour":
 		cutoff = time.Now().Add(-1 * time.Hour)
@@ -93,14 +92,12 @@ func getHistoricalStatsHandler(e *core.RequestEvent) error {
 		cutoff = time.Now().Add(-14 * 24 * time.Hour)
 	}
 
-	records, err := e.App.FindRecordsByFilter(collections.SystemStats, "created > {:cutoff}", "created", 0, 0, dbx.Params{
+	records, err := e.App.FindRecordsByFilter("system_stats", "created > {:cutoff}", "created", 0, 0, dbx.Params{
 		"cutoff": cutoff.UTC(),
 	})
 	if err != nil {
 		return e.InternalServerError("failed to retrieve historical stats", err)
 	}
-
-	e.App.Logger().Info("Retrieved historical stats", "period", period, "cutoff", cutoff, "records", len(records))
 
 	cpuStats := make([]HistoricalCPU, 0, len(records))
 	memoryStats := make([]HistoricalMemory, 0, len(records))
@@ -108,43 +105,43 @@ func getHistoricalStatsHandler(e *core.RequestEvent) error {
 	runtimeStats := make([]HistoricalRuntime, 0, len(records))
 
 	for _, record := range records {
-		var stat system.SystemStats
+		created := record.GetDateTime("created")
+		var stats system.SystemStats
+
 		data := record.Get("data")
 		jsonData, err := json.Marshal(data)
 		if err != nil {
 			return e.InternalServerError("failed to marshal record data", err)
 		}
 
-		if err := json.Unmarshal(jsonData, &stat); err != nil {
+		if err := json.Unmarshal(jsonData, &stats); err != nil {
 			return e.InternalServerError("failed to unmarshal system stats", err)
 		}
 
-		created := record.GetDateTime("created")
-
 		cpuStats = append(cpuStats, HistoricalCPU{
-			Percent:        stat.CPUPercent,
-			ProcessPercent: stat.ProcessCPUPercent,
+			Percent:        stats.CPUPercent,
+			ProcessPercent: stats.ProcessCPUPercent,
 			Created:        created,
 		})
 
 		memoryStats = append(memoryStats, HistoricalMemory{
-			Total:          float64(stat.Memory.Total),
-			Usage:          stat.Memory.UsedPercent,
-			Used:           float64(stat.Memory.Used),
-			ProcessPercent: stat.ProcessMemoryPercent,
+			Total:          float64(stats.Memory.Total),
+			Usage:          stats.Memory.UsedPercent,
+			Used:           float64(stats.Memory.Used),
+			ProcessPercent: stats.ProcessMemoryPercent,
 			Created:        created,
 		})
 
 		diskStats = append(diskStats, HistoricalDisk{
-			Usage:   stat.Disk.UsedPercent,
-			Total:   float64(stat.Disk.Total),
-			Used:    float64(stat.Disk.Used),
+			Usage:   stats.Disk.UsedPercent,
+			Total:   float64(stats.Disk.Total),
+			Used:    float64(stats.Disk.Used),
 			Created: created,
 		})
 
 		runtimeStats = append(runtimeStats, HistoricalRuntime{
-			Alloc:      float64(stat.Runtime.Alloc),
-			TotalAlloc: float64(stat.Runtime.TotalAlloc),
+			Alloc:      float64(stats.Runtime.Alloc),
+			TotalAlloc: float64(stats.Runtime.TotalAlloc),
 			Created:    created,
 		})
 	}

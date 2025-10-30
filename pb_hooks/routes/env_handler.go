@@ -17,130 +17,6 @@ type EnvVar struct {
 	Value string `json:"value"`
 }
 
-func readEnvFile() ([]EnvVar, error) {
-	envVars := make([]EnvVar, 0)
-
-	lines, err := readLines()
-	if err != nil {
-		return nil, err
-	}
-
-	for _, line := range lines {
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
-		}
-
-		if idx := strings.Index(line, "#"); idx != -1 {
-			line = strings.TrimSpace(line[:idx])
-		}
-
-		parts := strings.SplitN(line, "=", 2)
-		if len(parts) == 2 {
-			key := strings.TrimSpace(parts[0])
-			value := strings.TrimSpace(parts[1])
-			value = strings.Trim(value, `"'`)
-			envVars = append(envVars, EnvVar{Key: key, Value: value})
-		}
-	}
-
-	return envVars, nil
-}
-
-func readLines() ([]string, error) {
-	file, err := os.Open(".env")
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	lines := make([]string, 0)
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		lines = append(lines, scanner.Text())
-	}
-
-	return lines, scanner.Err()
-}
-
-func writeLines(lines []string) error {
-	file, err := os.Create(".env")
-	if err != nil {
-		return err
-	}
-	defer file.Close()
-
-	for _, line := range lines {
-		_, err := fmt.Fprintln(file, line)
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func updateEnv(lines []string, key, value string) ([]string, error) {
-	success := false
-
-	for i, line := range lines {
-		trimmed := strings.TrimSpace(line)
-		if trimmed == "" || strings.HasPrefix(trimmed, "#") {
-			continue
-		}
-
-		comment := ""
-		lineWithoutComment := line
-		if idx := strings.Index(line, "#"); idx != -1 && idx > 0 {
-			comment = line[idx:]
-			lineWithoutComment = strings.TrimSpace(line[:idx])
-		}
-
-		parts := strings.SplitN(lineWithoutComment, "=", 2)
-		if len(parts) == 2 && strings.TrimSpace(parts[0]) == key {
-			if comment != "" {
-				lines[i] = fmt.Sprintf("%s=%s %s", key, value, comment)
-			} else {
-				lines[i] = fmt.Sprintf("%s=%s", key, value)
-			}
-			success = true
-			break
-		}
-	}
-
-	if !success {
-		return lines, fmt.Errorf("environment variable not found")
-	}
-
-	return lines, nil
-}
-
-func deleteEnv(lines []string, key string) ([]string, error) {
-	newLines := make([]string, 0)
-	success := false
-
-	for _, line := range lines {
-		trimmed := strings.TrimSpace(line)
-		if trimmed == "" || strings.HasPrefix(trimmed, "#") {
-			newLines = append(newLines, line)
-			continue
-		}
-
-		parts := strings.SplitN(trimmed, "=", 2)
-		if len(parts) == 2 && strings.TrimSpace(parts[0]) == key {
-			success = true
-			continue
-		}
-
-		newLines = append(newLines, line)
-	}
-
-	if !success {
-		return lines, fmt.Errorf("environment variable not found")
-	}
-
-	return newLines, nil
-}
-
 func renderEnvPageHandler(e *core.RequestEvent) error {
 	html, err := template.NewRegistry().LoadFiles(
 		"views/layout.html",
@@ -300,4 +176,128 @@ func getEnvsHandler(e *core.RequestEvent) error {
 	}
 
 	return e.JSON(http.StatusOK, envVars)
+}
+
+func readEnvFile() ([]EnvVar, error) {
+	envVars := make([]EnvVar, 0)
+
+	lines, err := readLines()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, line := range lines {
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		if idx := strings.Index(line, "#"); idx != -1 {
+			line = strings.TrimSpace(line[:idx])
+		}
+
+		parts := strings.SplitN(line, "=", 2)
+		if len(parts) == 2 {
+			key := strings.TrimSpace(parts[0])
+			value := strings.TrimSpace(parts[1])
+			value = strings.Trim(value, `"'`)
+			envVars = append(envVars, EnvVar{Key: key, Value: value})
+		}
+	}
+
+	return envVars, nil
+}
+
+func readLines() ([]string, error) {
+	file, err := os.Open(".env")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	lines := make([]string, 0)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		lines = append(lines, scanner.Text())
+	}
+
+	return lines, scanner.Err()
+}
+
+func writeLines(lines []string) error {
+	file, err := os.Create(".env")
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	for _, line := range lines {
+		_, err := fmt.Fprintln(file, line)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func updateEnv(lines []string, key, value string) ([]string, error) {
+	success := false
+
+	for i, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if trimmed == "" || strings.HasPrefix(trimmed, "#") {
+			continue
+		}
+
+		comment := ""
+		lineWithoutComment := line
+		if idx := strings.Index(line, "#"); idx != -1 && idx > 0 {
+			comment = line[idx:]
+			lineWithoutComment = strings.TrimSpace(line[:idx])
+		}
+
+		parts := strings.SplitN(lineWithoutComment, "=", 2)
+		if len(parts) == 2 && strings.TrimSpace(parts[0]) == key {
+			if comment != "" {
+				lines[i] = fmt.Sprintf("%s=%s %s", key, value, comment)
+			} else {
+				lines[i] = fmt.Sprintf("%s=%s", key, value)
+			}
+			success = true
+			break
+		}
+	}
+
+	if !success {
+		return lines, fmt.Errorf("environment variable not found")
+	}
+
+	return lines, nil
+}
+
+func deleteEnv(lines []string, key string) ([]string, error) {
+	newLines := make([]string, 0)
+	success := false
+
+	for _, line := range lines {
+		trimmed := strings.TrimSpace(line)
+		if trimmed == "" || strings.HasPrefix(trimmed, "#") {
+			newLines = append(newLines, line)
+			continue
+		}
+
+		parts := strings.SplitN(trimmed, "=", 2)
+		if len(parts) == 2 && strings.TrimSpace(parts[0]) == key {
+			success = true
+			continue
+		}
+
+		newLines = append(newLines, line)
+	}
+
+	if !success {
+		return lines, fmt.Errorf("environment variable not found")
+	}
+
+	return newLines, nil
 }

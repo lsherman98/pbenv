@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{block "title" .}}Admin Panel{{end}}</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@2.0.0/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
+  </head>
+  <body class="bg-[var(--bodyColor)] font-sans text-[var(--txtPrimaryColor)] min-h-screen">
+    <header class="bg-[var(--baseColor)] shadow-sm px-4">
+      <div class="mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold mb-1" style="font-family: var(--baseFontFamily)">
+            {{block "page-title" .}}Admin Panel{{end}}
+          </h1>
+          <p class="text-sm text-[var(--txtHintColor)]" style="font-family: var(--baseFontFamily)">
+            {{block "page-description" .}}{{end}}
+          </p>
+        </div>
+        <nav class="flex gap-4 mt-4 md:mt-0">
+          <a href="/_/stats" class="text-[var(--primaryColor)] hover:text-[var(--infoColor)] font-medium"
+            >System Stats</a
+          >
+          <a href="/_/env" class="text-[var(--primaryColor)] hover:text-[var(--infoColor)] font-medium">Environment</a>
+          <a href="/_/" class="text-[var(--primaryColor)] hover:text-[var(--infoColor)] font-medium">Dashboard</a>
+        </nav>
+      </div>
+    </header>
+    <main class="mx-auto px-6 py-8">
+      {{block "body" .}}
+      <div class="text-center text-[var(--txtHintColor)]">Default content</div>
+      {{end}}
+    </main>
+    {{block "scripts" .}}{{end}}
+  </body>
+</html>
+<style>
+  :root {
+    --baseFontFamily: "Source Sans 3", sans-serif, emoji;
+    --monospaceFontFamily: "Ubuntu Mono", monospace, emoji;
+    --iconFontFamily: "remixicon";
+
+    --txtPrimaryColor: #1a1a24;
+    --txtHintColor: #617079;
+    --txtDisabledColor: #a0a6ac;
+
+    --primaryColor: #1a1a24;
+
+    --bodyColor: #f8f9fa;
+
+    --baseColor: #ffffff;
+    --baseAlt1Color: #e3e8ed;
+    --baseAlt2Color: #d7dde3;
+    --baseAlt3Color: #c9d0da;
+    --baseAlt4Color: #a5b0c0;
+
+    --infoColor: #5499e8;
+    --infoAltColor: #cee2f8;
+    --successColor: #32ad84;
+    --successAltColor: #c4eedc;
+    --dangerColor: #e34562;
+    --dangerAltColor: #f7cad2;
+    --warningColor: #ff944d;
+    --warningAltColor: #ffd4b8;
+
+    --overlayColor: rgba(53, 71, 104, 0.28);
+    --tooltipColor: rgba(0, 0, 0, 0.85);
+    --shadowColor: rgba(0, 0, 0, 0.06);
+
+    --baseFontSize: 14.5px;
+    --xsFontSize: 12px;
+    --smFontSize: 13px;
+    --lgFontSize: 15px;
+    --xlFontSize: 16px;
+
+    --baseLineHeight: 22px;
+    --smLineHeight: 16px;
+    --lgLineHeight: 24px;
+
+    --inputHeight: 34px;
+
+    --btnHeight: 40px;
+    --xsBtnHeight: 22px;
+    --smBtnHeight: 30px;
+    --lgBtnHeight: 54px;
+
+    --baseSpacing: 30px;
+    --xsSpacing: 15px;
+    --smSpacing: 20px;
+    --lgSpacing: 50px;
+    --xlSpacing: 60px;
+
+    --wrapperWidth: 850px;
+    --smWrapperWidth: 420px;
+    --lgWrapperWidth: 1200px;
+
+    --appSidebarWidth: 75px;
+    --pageSidebarWidth: 235px;
+
+    --baseAnimationSpeed: 150ms;
+    --activeAnimationSpeed: 70ms;
+    --entranceAnimationSpeed: 250ms;
+
+    --baseRadius: 4px;
+    --lgRadius: 12px;
+    --btnRadius: 4px;
+
+    --accent-color: var(--primaryColor);
+  }
+</style>

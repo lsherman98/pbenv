@@ -1,11 +1,10 @@
 package cron_jobs
 
 import (
-	"encoding/json" // Import the json package
+	"encoding/json"
 	"time"
 
-	"github.com/lsherman98/yt-rss/pocketbase/collections"
-	"github.com/lsherman98/yt-rss/pocketbase/system"
+	"github.com/lsherman98/pbenv/pb_hooks/system"
 	"github.com/pocketbase/dbx"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/core"

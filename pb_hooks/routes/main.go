@@ -14,12 +14,13 @@ func Init(app *pocketbase.PocketBase) error {
 		env.PUT("/{key}", updateEnvHandler)
 		env.DELETE("/{key}", deleteEnvHandler)
 
-		se.Router.POST("/_/restart", restartHandler)
 		stats := se.Router.Group("/_/stats")
 		stats.GET("", renderStatsPageHandler)
 		stats.GET("/data", getStatsHandler)
 		stats.GET("/historical", getHistoricalStatsHandler)
-
+		
+		se.Router.POST("/_/restart", restartHandler)
+		
 		return se.Next()
 	})
 

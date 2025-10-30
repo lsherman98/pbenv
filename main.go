@@ -6,6 +6,8 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
+	"github.com/lsherman98/pbenv/pb_hooks/cron_jobs"
+	"github.com/lsherman98/pbenv/pb_hooks/routes"
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/plugins/migratecmd"
 )
@@ -17,9 +19,9 @@ func main() {
 		log.Fatal("Error loading .env file")
 	}
 
-    if err := routes.Init(app); err != nil {
-        log.Fatal(err)
-    }
+	if err := routes.Init(app); err != nil {
+		log.Fatal(err)
+	}
 
 	if err := cron_jobs.Init(app); err != nil {
 		log.Fatal(err)
