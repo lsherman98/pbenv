@@ -595,7 +595,7 @@ monitoring of system performance{{end}} {{define "body"}}
           pointRadius: 0,
         },
       ];
-      yAxis = { ticks: { callback: (v) => formatBytes(v) } };
+      yAxis = { beginAtZero: true, max: reversedData[0]?.total, ticks: { callback: (v) => formatBytes(v) } };
       tooltipCallbacks = { label: (c) => (c.parsed.y !== null ? `Disk Used: ${formatBytes(c.parsed.y)}` : "") };
     }
 
