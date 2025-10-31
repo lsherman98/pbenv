@@ -366,10 +366,10 @@ monitoring of system performance{{end}} {{define "body"}}
 
   function updateRuntimeStats(runtime) {
     if (runtime) {
-      updateTextContent("runtime-alloc", runtime.Alloc, formatBytes);
-      updateTextContent("runtime-total-alloc", runtime.TotalAlloc, formatBytes);
-      updateTextContent("runtime-sys", runtime.Sys, formatBytes);
-      updateTextContent("runtime-num-gc", runtime.NumGC);
+      updateTextContent("runtime-alloc", runtime.alloc, formatBytes);
+      updateTextContent("runtime-total-alloc", runtime.total_alloc, formatBytes);
+      updateTextContent("runtime-sys", runtime.sys, formatBytes);
+      updateTextContent("runtime-num-gc", runtime.num_gc);
     } else {
       ["runtime-alloc", "runtime-total-alloc", "runtime-sys", "runtime-num-gc"].forEach((id) =>
         updateTextContent(id, "")

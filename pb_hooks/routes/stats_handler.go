@@ -13,8 +13,8 @@ import (
 
 type HistoricalCPU struct {
 	Percent        float64        `json:"percent"`
-	Created        types.DateTime `json:"created"`
 	ProcessPercent float64        `json:"process_percent"`
+	Created        types.DateTime `json:"created"`
 }
 
 type HistoricalMemory struct {
@@ -44,6 +44,15 @@ type HistoricalStats struct {
 	Memory  []HistoricalMemory  `json:"memory"`
 	Disk    []HistoricalDisk    `json:"disk"`
 	Runtime []HistoricalRuntime `json:"runtime"`
+	Network []HistoricalIO      `json:"network"`
+}
+
+type HistoricalIO struct {
+	BytesSent   uint64         `json:"bytes_sent"`
+	BytesRecv   uint64         `json:"bytes_recv"`
+	PacketsSent uint64         `json:"packets_sent"`
+	PacketsRecv uint64         `json:"packets_recv"`
+	Created     types.DateTime `json:"created"`
 }
 
 func renderStatsPageHandler(e *core.RequestEvent) error {
@@ -93,6 +102,7 @@ func getHistoricalStatsHandler(e *core.RequestEvent) error {
 	memoryStats := make([]HistoricalMemory, 0, len(records))
 	diskStats := make([]HistoricalDisk, 0, len(records))
 	runtimeStats := make([]HistoricalRuntime, 0, len(records))
+	networkStats := make([]HistoricalIO, 0, len(records))
 
 	for _, record := range records {
 		created := record.GetDateTime("created")
@@ -131,9 +141,16 @@ func getHistoricalStatsHandler(e *core.RequestEvent) error {
 		})
 
 		runtimeStats = append(runtimeStats, HistoricalRuntime{
-			Alloc:      float64(stats.Runtime.Alloc),
-			TotalAlloc: float64(stats.Runtime.TotalAlloc),
-			Created:    created,
+			Alloc:   float64(stats.Runtime.Alloc),
+			Created: created,
+		})
+
+		networkStats = append(networkStats, HistoricalIO{
+			BytesSent:   stats.NetworkStats.BytesSent,
+			BytesRecv:   stats.NetworkStats.BytesRecv,
+			PacketsSent: stats.NetworkStats.PacketsSent,
+			PacketsRecv: stats.NetworkStats.PacketsRecv,
+			Created:     created,
 		})
 	}
 
@@ -142,6 +159,7 @@ func getHistoricalStatsHandler(e *core.RequestEvent) error {
 		Memory:  memoryStats,
 		Disk:    diskStats,
 		Runtime: runtimeStats,
+		Network: networkStats,
 	}
 
 	return e.JSON(200, data)

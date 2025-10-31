@@ -14,6 +14,7 @@ func Init(app *pocketbase.PocketBase) error {
 	app.Cron().MustAdd("MeasureSystemStats", "* * * * *", func() {
 		stats, err := system.GetStats()
 		if err != nil {
+			app.Logger().Error("Failed to get system stats:", "error", err)
 			return
 		}
 
