@@ -19,10 +19,14 @@ var (
 )
 
 type NetworkStats struct {
-	BytesRecv   uint64 `json:"bytes_received"`
-	BytesSent   uint64 `json:"bytes_sent"`
-	PacketsRecv uint64 `json:"packets_received"`
-	PacketsSent uint64 `json:"packets_sent"`
+	BytesRecv        uint64 `json:"bytes_received"`
+	BytesSent        uint64 `json:"bytes_sent"`
+	PacketsRecv      uint64 `json:"packets_received"`
+	PacketsSent      uint64 `json:"packets_sent"`
+	TotalBytesRecv   uint64 `json:"total_bytes_received"`
+	TotalBytesSent   uint64 `json:"total_bytes_sent"`
+	TotalPacketsRecv uint64 `json:"total_packets_received"`
+	TotalPacketsSent uint64 `json:"total_packets_sent"`
 }
 
 type SystemStats struct {
@@ -118,27 +122,25 @@ func GetStats() (*SystemStats, error) {
 	}
 
 	var bytesSent, bytesRecv, packetsSent, packetsRecv uint64
-	if len(counters) > 0 {
-		currentStats := counters[0]
+	ioStats := counters[0]
 
-		networkStatsMutex.Lock()
-		if prevNetworkStats != nil {
-			if currentStats.BytesSent >= prevNetworkStats.BytesSent {
-				bytesSent = currentStats.BytesSent - prevNetworkStats.BytesSent
-			}
-			if currentStats.BytesRecv >= prevNetworkStats.BytesRecv {
-				bytesRecv = currentStats.BytesRecv - prevNetworkStats.BytesRecv
-			}
-			if currentStats.PacketsSent >= prevNetworkStats.PacketsSent {
-				packetsSent = currentStats.PacketsSent - prevNetworkStats.PacketsSent
-			}
-			if currentStats.PacketsRecv >= prevNetworkStats.PacketsRecv {
-				packetsRecv = currentStats.PacketsRecv - prevNetworkStats.PacketsRecv
-			}
+	networkStatsMutex.Lock()
+	if prevNetworkStats != nil {
+		if ioStats.BytesSent >= prevNetworkStats.BytesSent {
+			bytesSent = ioStats.BytesSent - prevNetworkStats.BytesSent
 		}
-		prevNetworkStats = &currentStats
-		networkStatsMutex.Unlock()
+		if ioStats.BytesRecv >= prevNetworkStats.BytesRecv {
+			bytesRecv = ioStats.BytesRecv - prevNetworkStats.BytesRecv
+		}
+		if ioStats.PacketsSent >= prevNetworkStats.PacketsSent {
+			packetsSent = ioStats.PacketsSent - prevNetworkStats.PacketsSent
+		}
+		if ioStats.PacketsRecv >= prevNetworkStats.PacketsRecv {
+			packetsRecv = ioStats.PacketsRecv - prevNetworkStats.PacketsRecv
+		}
 	}
+	prevNetworkStats = &ioStats
+	networkStatsMutex.Unlock()
 
 	return &SystemStats{
 		CPU:                   cpuStat,
@@ -152,10 +154,14 @@ func GetStats() (*SystemStats, error) {
 		Host:                  hostStat,
 		Runtime:               &runtimeStats,
 		NetworkStats: NetworkStats{
-			BytesRecv:   bytesRecv,
-			BytesSent:   bytesSent,
-			PacketsRecv: packetsRecv,
-			PacketsSent: packetsSent,
+			BytesRecv:        bytesRecv,
+			BytesSent:        bytesSent,
+			PacketsRecv:      packetsRecv,
+			PacketsSent:      packetsSent,
+			TotalBytesRecv:   ioStats.BytesRecv,
+			TotalBytesSent:   ioStats.BytesSent,
+			TotalPacketsRecv: ioStats.PacketsRecv,
+			TotalPacketsSent: ioStats.PacketsSent,
 		},
 	}, nil
 }

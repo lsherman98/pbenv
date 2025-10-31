@@ -39,20 +39,20 @@ type HistoricalRuntime struct {
 	Created    types.DateTime `json:"created"`
 }
 
+type HistoricalIO struct {
+	BytesSent   uint64         `json:"bytes_sent"`
+	BytesRecv   uint64         `json:"bytes_received"`
+	PacketsSent uint64         `json:"packets_sent"`
+	PacketsRecv uint64         `json:"packets_received"`
+	Created     types.DateTime `json:"created"`
+}
+
 type HistoricalStats struct {
 	CPU     []HistoricalCPU     `json:"cpu"`
 	Memory  []HistoricalMemory  `json:"memory"`
 	Disk    []HistoricalDisk    `json:"disk"`
 	Runtime []HistoricalRuntime `json:"runtime"`
 	Network []HistoricalIO      `json:"network"`
-}
-
-type HistoricalIO struct {
-	BytesSent   uint64         `json:"bytes_sent"`
-	BytesRecv   uint64         `json:"bytes_recv"`
-	PacketsSent uint64         `json:"packets_sent"`
-	PacketsRecv uint64         `json:"packets_recv"`
-	Created     types.DateTime `json:"created"`
 }
 
 func renderStatsPageHandler(e *core.RequestEvent) error {
@@ -91,7 +91,7 @@ func getHistoricalStatsHandler(e *core.RequestEvent) error {
 		cutoff = time.Now().Add(-14 * 24 * time.Hour)
 	}
 
-	records, err := e.App.FindRecordsByFilter("system_stats", "created > {:cutoff}", "created", 0, 0, dbx.Params{
+	records, err := e.App.FindRecordsByFilter("system_stats", "created > {:cutoff}", "-created", 0, 0, dbx.Params{
 		"cutoff": cutoff.UTC(),
 	})
 	if err != nil {

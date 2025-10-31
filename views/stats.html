@@ -1,188 +1,265 @@
-{{define "title"}}System Stats{{end}} {{define "page-title"}}System Stats{{end}} {{define "page-description"}}Real-time
-monitoring of system performance{{end}} {{define "body"}}
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
-  <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
-    <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Host</h2>
-    <div class="grid grid-cols-2 gap-1">
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Hostname</span>
-        <span id="hostname" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+{{define "title"}}System Stats{{end}} {{define "page-title"}}System Stats{{end}} {{define "page-description"}}Real-time monitoring of system performance{{end}} {{define "body"}}
+<div class="flex border-b border-[var(--baseAlt2Color)] mb-4">
+  <button id="system-tab" class="px-4 py-2 text-[var(--primaryColor)] border-b-2 border-[var(--primaryColor)] font-semibold bg-transparent">System</button>
+  <button id="network-tab" class="px-4 py-2 text-[var(--txtHintColor)] bg-transparent">Network</button>
+</div>
+
+<div id="system-content">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Host</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Hostname</span>
+          <span id="hostname" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">OS</span>
+          <span id="os" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Uptime</span>
+          <span id="uptime" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Boot Time</span>
+          <span id="bootTime" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start col-span-2">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Processes</span>
+          <span id="procs" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">OS</span>
-        <span id="os" class="text-[var(--txtHintColor)] text-xs"></span>
+    </div>
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">CPU</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Process Usage</span>
+          <span id="process-cpu-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">System Usage</span>
+          <span id="system-cpu-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Model</span>
+          <span id="cpu-modelName" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Cores</span>
+          <span id="cpu-cores" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Speed</span>
+          <span id="cpu-mhz" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Family</span>
+          <span id="cpu-family" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Uptime</span>
-        <span id="uptime" class="text-[var(--txtHintColor)] text-xs"></span>
+    </div>
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Memory</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Process Usage</span>
+          <span id="process-mem-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">System Usage</span>
+          <span id="mem-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total</span>
+          <span id="mem-total" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Available</span>
+          <span id="mem-available" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start col-span-2">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Used</span>
+          <span id="mem-used" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Boot Time</span>
-        <span id="bootTime" class="text-[var(--txtHintColor)] text-xs"></span>
+    </div>
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Go Runtime</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Alloc</span>
+          <span id="runtime-alloc" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total Alloc</span>
+          <span id="runtime-total-alloc" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Sys</span>
+          <span id="runtime-sys" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Num GC</span>
+          <span id="runtime-num-gc" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start col-span-2">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Processes</span>
-        <span id="procs" class="text-[var(--txtHintColor)] text-xs"></span>
+    </div>
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Disk</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <!-- Removed Path stat -->
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total</span>
+          <span id="disk-total" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Free</span>
+          <span id="disk-free" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Used</span>
+          <span id="disk-used" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Usage</span>
+          <span id="disk-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
+      </div>
+    </div>
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Swap Memory</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total</span>
+          <span id="swap-total" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Used</span>
+          <span id="swap-used" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Free</span>
+          <span id="swap-free" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Usage</span>
+          <span id="swap-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+        </div>
       </div>
     </div>
   </div>
-  <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
-    <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">CPU</h2>
-    <div class="grid grid-cols-2 gap-1">
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Process Usage</span>
-        <span id="process-cpu-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+        <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">CPU Usage</h2>
+        <select class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
+          <option value="hour">Last Hour</option>
+          <option value="sixHrs">Last 6 Hours</option>
+          <option value="day" selected>Last Day</option>
+          <option value="week">Last Week</option>
+          <option value="fortnight">Last 2 Weeks</option>
+        </select>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">System Usage</span>
-        <span id="system-cpu-usage" class="text-[var(--txtHintColor)] text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Model</span>
-        <span id="cpu-modelName" class="text-[var(--txtHintColor)] text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Cores</span>
-        <span id="cpu-cores" class="text-[var(--txtHintColor)] text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Speed</span>
-        <span id="cpu-mhz" class="text-[var(--txtHintColor)] text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Family</span>
-        <span id="cpu-family" class="text-[var(--txtHintColor)] text-xs"></span>
+      <div class="overflow-x-auto">
+        <canvas id="cpu-chart" class="w-full min-h-[250px]"></canvas>
       </div>
     </div>
-  </div>
-  <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
-    <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Memory</h2>
-    <div class="grid grid-cols-2 gap-1">
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Process Usage</span>
-        <span id="process-mem-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+    <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+        <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">Memory Usage</h2>
+        <div class="flex gap-2">
+          <select id="memory-view-selector" class="px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
+            <option value="percent" selected>Percentage</option>
+            <option value="absolute">Absolute</option>
+          </select>
+          <select class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
+            <option value="hour">Last Hour</option>
+            <option value="sixHrs">Last 6 Hours</option>
+            <option value="day" selected>Last Day</option>
+            <option value="week">Last Week</option>
+            <option value="fortnight">Last 2 Weeks</option>
+          </select>
+        </div>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">System Usage</span>
-        <span id="mem-usage" class="text-[var(--txtHintColor)] text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total</span>
-        <span id="mem-total" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Available</span>
-        <span id="mem-available" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start col-span-2">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Used</span>
-        <span id="mem-used" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+      <div class="overflow-x-auto">
+        <canvas id="memory-chart" class="w-full min-h-[250px]"></canvas>
       </div>
     </div>
-  </div>
-  <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
-    <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">
-      Go Runtime
-    </h2>
-    <div class="grid grid-cols-2 gap-1">
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Alloc</span>
-        <span id="runtime-alloc" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+    <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+        <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">Disk Usage</h2>
+        <div class="flex gap-2">
+          <select id="disk-view-selector" class="px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
+            <option value="percent" selected>Percentage</option>
+            <option value="absolute">Absolute</option>
+          </select>
+          <select class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
+            <option value="hour">Last Hour</option>
+            <option value="sixHrs">Last 6 Hours</option>
+            <option value="day" selected>Last Day</option>
+            <option value="week">Last Week</option>
+            <option value="fortnight">Last 2 Weeks</option>
+          </select>
+        </div>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total Alloc</span>
-        <span id="runtime-total-alloc" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Sys</span>
-        <span id="runtime-sys" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Num GC</span>
-        <span id="runtime-num-gc" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+      <div class="overflow-x-auto">
+        <canvas id="disk-chart" class="w-full min-h-[250px]"></canvas>
       </div>
     </div>
-  </div>
-  <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
-    <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Disk</h2>
-    <div class="grid grid-cols-2 gap-1">
-      <!-- Removed Path stat -->
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total</span>
-        <span id="disk-total" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+    <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+        <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">Go Runtime Memory</h2>
+        <select class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
+          <option value="hour">Last Hour</option>
+          <option value="sixHrs">Last 6 Hours</option>
+          <option value="day" selected>Last Day</option>
+          <option value="week">Last Week</option>
+          <option value="fortnight">Last 2 Weeks</option>
+        </select>
       </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Free</span>
-        <span id="disk-free" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Used</span>
-        <span id="disk-used" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Usage</span>
-        <span id="disk-usage" class="text-[var(--txtHintColor)] text-xs"></span>
-      </div>
-    </div>
-  </div>
-  <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
-    <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">
-      Swap Memory
-    </h2>
-    <div class="grid grid-cols-2 gap-1">
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Total</span>
-        <span id="swap-total" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Used</span>
-        <span id="swap-used" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Free</span>
-        <span id="swap-free" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
-      </div>
-      <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
-        <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Usage</span>
-        <span id="swap-usage" class="text-[var(--txtHintColor)] text-xs"></span>
+      <div class="overflow-x-auto">
+        <canvas id="runtime-chart" class="w-full min-h-[250px]"></canvas>
       </div>
     </div>
   </div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-  <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
-      <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">CPU Usage</h2>
-      <select
-        class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm"
-      >
-        <option value="hour">Last Hour</option>
-        <option value="sixHrs">Last 6 Hours</option>
-        <option value="day" selected>Last Day</option>
-        <option value="week">Last Week</option>
-        <option value="fortnight">Last 2 Weeks</option>
-      </select>
+<div id="network-content" class="hidden">
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Total Bytes</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Received</span>
+          <span id="net-bytes-recv" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Sent</span>
+          <span id="net-bytes-sent" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+      </div>
     </div>
-    <div class="overflow-x-auto">
-      <canvas id="cpu-chart" class="w-full min-h-[250px]"></canvas>
+    <div class="bg-[var(--baseColor)] rounded shadow-sm p-3 flex flex-col gap-1">
+      <h2 class="text-sm font-bold text-[var(--primaryColor)] mb-1" style="font-family: var(--baseFontFamily)">Total Packets</h2>
+      <div class="grid grid-cols-2 gap-1">
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Received</span>
+          <span id="net-packets-recv" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+        <div class="bg-[var(--baseAlt1Color)] rounded p-1 flex flex-col items-start">
+          <span class="font-medium text-[var(--primaryColor)] text-xs mb-0.5">Sent</span>
+          <span id="net-packets-sent" class="text-[var(--txtHintColor)] font-mono text-xs"></span>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
-      <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">
-        Memory Usage
-      </h2>
-      <div class="flex gap-2">
-        <select
-          id="memory-view-selector"
-          class="px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm"
-        >
-          <option value="percent" selected>Percentage</option>
-          <option value="absolute">Absolute</option>
-        </select>
-        <select
-          class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm"
-        >
+  <p class="text-[var(--txtHintColor)] text-sm mb-4">Note: Network statistics represent the total traffic for the entire machine, not just this application.</p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+        <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">Network Traffic (Bytes)</h2>
+        <select class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
           <option value="hour">Last Hour</option>
           <option value="sixHrs">Last 6 Hours</option>
           <option value="day" selected>Last Day</option>
@@ -190,27 +267,14 @@ monitoring of system performance{{end}} {{define "body"}}
           <option value="fortnight">Last 2 Weeks</option>
         </select>
       </div>
+      <div class="overflow-x-auto">
+        <canvas id="network-bytes-chart" class="w-full min-h-[250px]"></canvas>
+      </div>
     </div>
-    <div class="overflow-x-auto">
-      <canvas id="memory-chart" class="w-full min-h-[250px]"></canvas>
-    </div>
-  </div>
-  <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
-      <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">
-        Disk Usage
-      </h2>
-      <div class="flex gap-2">
-        <select
-          id="disk-view-selector"
-          class="px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm"
-        >
-          <option value="percent" selected>Percentage</option>
-          <option value="absolute">Absolute</option>
-        </select>
-        <select
-          class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm"
-        >
+    <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
+        <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">Network Traffic (Packets)</h2>
+        <select class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm">
           <option value="hour">Last Hour</option>
           <option value="sixHrs">Last 6 Hours</option>
           <option value="day" selected>Last Day</option>
@@ -218,28 +282,9 @@ monitoring of system performance{{end}} {{define "body"}}
           <option value="fortnight">Last 2 Weeks</option>
         </select>
       </div>
-    </div>
-    <div class="overflow-x-auto">
-      <canvas id="disk-chart" class="w-full min-h-[250px]"></canvas>
-    </div>
-  </div>
-  <div class="bg-[var(--baseColor)] rounded-lg shadow p-6 flex flex-col gap-4">
-    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-2 mb-2">
-      <h2 class="text-lg font-bold text-[var(--primaryColor)]" style="font-family: var(--baseFontFamily)">
-        Go Runtime Memory
-      </h2>
-      <select
-        class="period-selector px-3 py-2 border border-[var(--baseAlt2Color)] rounded-md bg-[var(--baseAlt1Color)] text-sm"
-      >
-        <option value="hour">Last Hour</option>
-        <option value="sixHrs">Last 6 Hours</option>
-        <option value="day" selected>Last Day</option>
-        <option value="week">Last Week</option>
-        <option value="fortnight">Last 2 Weeks</option>
-      </select>
-    </div>
-    <div class="overflow-x-auto">
-      <canvas id="runtime-chart" class="w-full min-h-[250px]"></canvas>
+      <div class="overflow-x-auto">
+        <canvas id="network-packets-chart" class="w-full min-h-[250px]"></canvas>
+      </div>
     </div>
   </div>
 </div>
@@ -249,7 +294,7 @@ monitoring of system performance{{end}} {{define "body"}}
     window.location.href = window.location.origin + "/_/#/login";
   }
 
-  let cpuChart, memoryChart, diskChart, runtimeChart;
+  let cpuChart, memoryChart, diskChart, runtimeChart, networkBytesChart, networkPacketsChart;
   let memoryView = "percent";
   let diskView = "percent";
 
@@ -371,9 +416,19 @@ monitoring of system performance{{end}} {{define "body"}}
       updateTextContent("runtime-sys", runtime.sys, formatBytes);
       updateTextContent("runtime-num-gc", runtime.num_gc);
     } else {
-      ["runtime-alloc", "runtime-total-alloc", "runtime-sys", "runtime-num-gc"].forEach((id) =>
-        updateTextContent(id, "")
-      );
+      ["runtime-alloc", "runtime-total-alloc", "runtime-sys", "runtime-num-gc"].forEach((id) => updateTextContent(id, ""));
+    }
+  }
+
+  function updateNetworkStats(stats) {
+    console.log("Network Stats:", stats);
+    if (stats) {
+      updateTextContent("net-bytes-recv", stats.total_bytes_received, formatBytes);
+      updateTextContent("net-bytes-sent", stats.total_bytes_sent, formatBytes);
+      updateTextContent("net-packets-recv", stats.total_packets_received);
+      updateTextContent("net-packets-sent", stats.total_packets_sent);
+    } else {
+      ["net-bytes-recv", "net-bytes-sent", "net-packets-recv", "net-packets-sent"].forEach((id) => updateTextContent(id, ""));
     }
   }
 
@@ -391,6 +446,7 @@ monitoring of system performance{{end}} {{define "body"}}
         updateDiskStats(data.disk);
         updateSwapStats(data.swap);
         updateRuntimeStats(data.runtime);
+        updateNetworkStats(data.network_stats);
       })
       .catch((error) => {
         console.error("Error fetching stats:", error);
@@ -402,6 +458,17 @@ monitoring of system performance{{end}} {{define "body"}}
     if (memoryChart) memoryChart.destroy();
     if (diskChart) diskChart.destroy();
     if (runtimeChart) runtimeChart.destroy();
+    if (networkBytesChart) networkBytesChart.destroy();
+    if (networkPacketsChart) networkPacketsChart.destroy();
+  }
+
+  function resizeCharts() {
+    if (cpuChart) cpuChart.resize();
+    if (memoryChart) memoryChart.resize();
+    if (diskChart) diskChart.resize();
+    if (runtimeChart) runtimeChart.resize();
+    if (networkBytesChart) networkBytesChart.resize();
+    if (networkPacketsChart) networkPacketsChart.resize();
   }
 
   function getTimeScaleOptions(period) {
@@ -445,7 +512,6 @@ monitoring of system performance{{end}} {{define "body"}}
   }
 
   function renderCpuChart(data, scales) {
-    const reversedData = data.slice().reverse();
     const ctx = document.getElementById("cpu-chart").getContext("2d");
     const systemGradient = createChartGradient(ctx, "rgba(255, 99, 132, 0.5)", "rgba(255, 99, 132, 0.2)");
     const processGradient = createChartGradient(ctx, "rgba(54, 162, 235, 0.5)", "rgba(54, 162, 235, 0.2)");
@@ -456,7 +522,7 @@ monitoring of system performance{{end}} {{define "body"}}
         datasets: [
           {
             label: "System CPU Usage",
-            data: insertNullsForGaps(reversedData, "percent"),
+            data: insertNullsForGaps(data, "percent"),
             borderColor: "rgba(255, 99, 132, 1)",
             backgroundColor: systemGradient,
             spanGaps: false,
@@ -467,7 +533,7 @@ monitoring of system performance{{end}} {{define "body"}}
           },
           {
             label: "Process CPU Usage",
-            data: insertNullsForGaps(reversedData, "process_percent"),
+            data: insertNullsForGaps(data, "process_percent"),
             borderColor: "rgba(54, 162, 235, 1)",
             backgroundColor: processGradient,
             borderWidth: 1,
@@ -480,14 +546,14 @@ monitoring of system performance{{end}} {{define "body"}}
       },
       options: {
         responsive: true,
-        scales: { 
-          ...scales, 
-          y: { 
-            type: "logarithmic", 
+        scales: {
+          ...scales,
+          y: {
+            type: "logarithmic",
             ticks: {
               callback: (v) => `${v}%`,
               autoSkip: true,
-              maxTicksLimit: 12, 
+              maxTicksLimit: 12,
             },
           },
         },
@@ -509,7 +575,6 @@ monitoring of system performance{{end}} {{define "body"}}
   }
 
   function renderMemoryChart(data, scales) {
-    const reversedData = data.slice().reverse();
     const ctx = document.getElementById("memory-chart").getContext("2d");
     const systemGradient = createChartGradient(ctx, "rgba(255, 159, 64, 0.5)", "rgba(255, 159, 64, 0.2)");
     const processGradient = createChartGradient(ctx, "rgba(75, 192, 192, 0.5)", "rgba(75, 192, 192, 0.2)");
@@ -519,7 +584,7 @@ monitoring of system performance{{end}} {{define "body"}}
       datasets = [
         {
           label: "System Memory Usage",
-          data: insertNullsForGaps(reversedData, "usage"),
+          data: insertNullsForGaps(data, "usage"),
           borderColor: "rgba(255, 159, 64, 1)",
           backgroundColor: systemGradient,
           borderWidth: 1,
@@ -529,7 +594,7 @@ monitoring of system performance{{end}} {{define "body"}}
         },
         {
           label: "Process Memory Usage",
-          data: insertNullsForGaps(reversedData, "process_percent"),
+          data: insertNullsForGaps(data, "process_percent"),
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: processGradient,
           borderWidth: 1,
@@ -538,20 +603,22 @@ monitoring of system performance{{end}} {{define "body"}}
           pointRadius: 0,
         },
       ];
-      yAxis = { 
-        type: "logarithmic", 
+      yAxis = {
+        type: "logarithmic",
         ticks: {
           callback: (v) => `${v}%`,
           autoSkip: true,
-          maxTicksLimit: 12, 
+          maxTicksLimit: 12,
         },
       };
-      tooltipCallbacks = { label: (c) => `${c.datasetIndex === 0 ? "System" : "Process"}: ${c.parsed.y.toFixed(2)}%` };
+      tooltipCallbacks = {
+        label: (c) => `${c.datasetIndex === 0 ? "System" : "Process"}: ${c.parsed.y.toFixed(2)}%`,
+      };
     } else {
       datasets = [
         {
           label: "System Memory Usage",
-          data: insertNullsForGaps(reversedData, "used"),
+          data: insertNullsForGaps(data, "used"),
           borderColor: "rgba(255, 159, 64, 1)",
           backgroundColor: systemGradient,
           borderWidth: 1,
@@ -561,7 +628,7 @@ monitoring of system performance{{end}} {{define "body"}}
         },
         {
           label: "Process Memory Usage",
-          data: insertNullsForGaps(reversedData, "process_absolute"),
+          data: insertNullsForGaps(data, "process_absolute"),
           borderColor: "rgba(75, 192, 192, 1)",
           backgroundColor: processGradient,
           borderWidth: 1,
@@ -572,15 +639,17 @@ monitoring of system performance{{end}} {{define "body"}}
       ];
       yAxis = {
         beginAtZero: true,
-        max: reversedData[0]?.total,
+        max: data[0]?.total,
         type: "logarithmic",
         ticks: {
           callback: (v) => formatBytes(v),
           autoSkip: true,
-          maxTicksLimit: 12, 
-        }
+          maxTicksLimit: 12,
+        },
       };
-      tooltipCallbacks = { label: (c) => `${c.datasetIndex === 0 ? "System" : "Process"}: ${formatBytes(c.parsed.y)}` };
+      tooltipCallbacks = {
+        label: (c) => `${c.datasetIndex === 0 ? "System" : "Process"}: ${formatBytes(c.parsed.y)}`,
+      };
     }
 
     memoryChart = new Chart(ctx, {
@@ -591,14 +660,17 @@ monitoring of system performance{{end}} {{define "body"}}
         scales: { ...scales, y: yAxis },
         plugins: {
           title: { display: true },
-          tooltip: { mode: "index", intersect: false, callbacks: tooltipCallbacks },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+            callbacks: tooltipCallbacks,
+          },
         },
       },
     });
   }
 
   function renderDiskChart(data, scales) {
-    const reversedData = data.slice().reverse();
     const ctx = document.getElementById("disk-chart").getContext("2d");
     const gradient = createChartGradient(ctx, "rgba(153, 102, 255, 0.5)", "rgba(153, 102, 255, 0.2)");
 
@@ -607,7 +679,7 @@ monitoring of system performance{{end}} {{define "body"}}
       datasets = [
         {
           label: "System Disk Usage",
-          data: insertNullsForGaps(reversedData, "usage"),
+          data: insertNullsForGaps(data, "usage"),
           borderColor: "rgba(153, 102, 255, 1)",
           backgroundColor: gradient,
           borderWidth: 1,
@@ -616,21 +688,23 @@ monitoring of system performance{{end}} {{define "body"}}
           pointRadius: 0,
         },
       ];
-      yAxis = { 
-        beginAtZero: true, 
+      yAxis = {
+        beginAtZero: true,
         max: 100,
         ticks: {
           callback: (v) => `${v}%`,
           autoSkip: true,
-          maxTicksLimit: 12, 
+          maxTicksLimit: 12,
         },
       };
-      tooltipCallbacks = { label: (c) => (c.parsed.y !== null ? `System Disk Usage: ${c.parsed.y.toFixed(2)}%` : "") };
+      tooltipCallbacks = {
+        label: (c) => (c.parsed.y !== null ? `System Disk Usage: ${c.parsed.y.toFixed(2)}%` : ""),
+      };
     } else {
       datasets = [
         {
           label: "System Disk Usage",
-          data: insertNullsForGaps(reversedData, "used"),
+          data: insertNullsForGaps(data, "used"),
           borderColor: "rgba(153, 102, 255, 1)",
           backgroundColor: gradient,
           borderWidth: 1,
@@ -639,8 +713,14 @@ monitoring of system performance{{end}} {{define "body"}}
           pointRadius: 0,
         },
       ];
-      yAxis = { beginAtZero: true, max: reversedData[0]?.total, ticks: { callback: (v) => formatBytes(v) } };
-      tooltipCallbacks = { label: (c) => (c.parsed.y !== null ? `Disk Used: ${formatBytes(c.parsed.y)}` : "") };
+      yAxis = {
+        beginAtZero: true,
+        max: data[0]?.total,
+        ticks: { callback: (v) => formatBytes(v) },
+      };
+      tooltipCallbacks = {
+        label: (c) => (c.parsed.y !== null ? `Disk Used: ${formatBytes(c.parsed.y)}` : ""),
+      };
     }
 
     diskChart = new Chart(ctx, {
@@ -651,14 +731,17 @@ monitoring of system performance{{end}} {{define "body"}}
         scales: { ...scales, y: yAxis },
         plugins: {
           title: { display: true },
-          tooltip: { mode: "index", intersect: false, callbacks: tooltipCallbacks },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+            callbacks: tooltipCallbacks,
+          },
         },
       },
     });
   }
 
   function renderRuntimeChart(data, scales) {
-    const reversedData = data.slice().reverse();
     const ctx = document.getElementById("runtime-chart").getContext("2d");
     const gradient = createChartGradient(ctx, "rgba(255, 206, 86, 0.5)", "rgba(255, 206, 86, 0.2)");
 
@@ -668,7 +751,7 @@ monitoring of system performance{{end}} {{define "body"}}
         datasets: [
           {
             label: "Go Process Allocated Memory",
-            data: insertNullsForGaps(reversedData, "alloc"),
+            data: insertNullsForGaps(data, "alloc"),
             borderColor: "rgba(255, 206, 86, 1)",
             backgroundColor: gradient,
             borderWidth: 1,
@@ -680,13 +763,135 @@ monitoring of system performance{{end}} {{define "body"}}
       },
       options: {
         responsive: true,
-        scales: { ...scales, y: { ticks: { callback: (v) => formatBytes(v) } } },
+        scales: {
+          ...scales,
+          y: { ticks: { callback: (v) => formatBytes(v) } },
+        },
         plugins: {
           title: { display: true },
           tooltip: {
             mode: "index",
             intersect: false,
-            callbacks: { label: (c) => "Allocated Memory: " + formatBytes(c.parsed.y) },
+            callbacks: {
+              label: (c) => "Allocated Memory: " + formatBytes(c.parsed.y),
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function renderNetworkBytesChart(data, scales) {
+    const ctx = document.getElementById("network-bytes-chart").getContext("2d");
+    const receivedGradient = createChartGradient(ctx, "rgba(54, 162, 235, 0.5)", "rgba(54, 162, 235, 0.2)");
+    const sentGradient = createChartGradient(ctx, "rgba(255, 99, 132, 0.5)", "rgba(255, 99, 132, 0.2)");
+
+    const receivedData = data.map((d) => ({
+      created: d.created,
+      value: d.bytes_received,
+    }));
+    const sentData = data.map((d) => ({
+      created: d.created,
+      value: d.bytes_sent,
+    }));
+
+    networkBytesChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        datasets: [
+          {
+            label: "Bytes Received",
+            data: insertNullsForGaps(receivedData, "value"),
+            borderColor: "rgba(54, 162, 235, 1)",
+            backgroundColor: receivedGradient,
+            borderWidth: 1,
+            fill: true,
+            tension: 0.1,
+            pointRadius: 0,
+          },
+          {
+            label: "Bytes Sent",
+            data: insertNullsForGaps(sentData, "value"),
+            borderColor: "rgba(255, 99, 132, 1)",
+            backgroundColor: sentGradient,
+            borderWidth: 1,
+            fill: true,
+            tension: 0.1,
+            pointRadius: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          ...scales,
+          y: { ticks: { callback: (v) => formatBytes(v) } },
+        },
+        plugins: {
+          title: { display: true },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+            callbacks: {
+              label: (c) => `${c.dataset.label}: ${formatBytes(c.parsed.y)}`,
+            },
+          },
+        },
+      },
+    });
+  }
+
+  function renderNetworkPacketsChart(data, scales) {
+    const ctx = document.getElementById("network-packets-chart").getContext("2d");
+    const receivedGradient = createChartGradient(ctx, "rgba(75, 192, 192, 0.5)", "rgba(75, 192, 192, 0.2)");
+    const sentGradient = createChartGradient(ctx, "rgba(255, 159, 64, 0.5)", "rgba(255, 159, 64, 0.2)");
+
+    const receivedData = data.map((d) => ({
+      created: d.created,
+      value: d.packets_received,
+    }));
+    const sentData = data.map((d) => ({
+      created: d.created,
+      value: d.packets_sent,
+    }));
+
+    networkPacketsChart = new Chart(ctx, {
+      type: "line",
+      data: {
+        datasets: [
+          {
+            label: "Packets Received",
+            data: insertNullsForGaps(receivedData, "value"),
+            borderColor: "rgba(75, 192, 192, 1)",
+            backgroundColor: receivedGradient,
+            borderWidth: 1,
+            fill: true,
+            tension: 0.1,
+            pointRadius: 0,
+          },
+          {
+            label: "Packets Sent",
+            data: insertNullsForGaps(sentData, "value"),
+            borderColor: "rgba(255, 159, 64, 1)",
+            backgroundColor: sentGradient,
+            borderWidth: 1,
+            fill: true,
+            tension: 0.1,
+            pointRadius: 0,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: { ...scales, y: { type: "logarithmic" } },
+        plugins: {
+          title: { display: true },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+            callbacks: {
+              label: (c) => `${c.dataset.label}: ${c.parsed.y}`,
+            },
           },
         },
       },
@@ -694,7 +899,9 @@ monitoring of system performance{{end}} {{define "body"}}
   }
 
   function fetchHistoricalStats(period = "day") {
-    fetch(`/_/stats/historical?period=${period}`, { headers: { Authorization: SUPERUSER_TOKEN } })
+    fetch(`/_/stats/historical?period=${period}`, {
+      headers: { Authorization: SUPERUSER_TOKEN },
+    })
       .then((response) => response.json())
       .then((data) => {
         destroyCharts();
@@ -703,6 +910,10 @@ monitoring of system performance{{end}} {{define "body"}}
         if (data.memory && data.memory.length > 0) renderMemoryChart(data.memory, scales);
         if (data.disk && data.disk.length > 0) renderDiskChart(data.disk, scales);
         if (data.runtime && data.runtime.length > 0) renderRuntimeChart(data.runtime, scales);
+        if (data.network && data.network.length > 0) {
+          renderNetworkBytesChart(data.network, scales);
+          renderNetworkPacketsChart(data.network, scales);
+        }
       })
       .catch((error) => {
         console.error("Error fetching historical stats:", error);
@@ -719,26 +930,102 @@ monitoring of system performance{{end}} {{define "body"}}
     return document.querySelector(".period-selector").value;
   }
 
+  const systemTab = document.getElementById("system-tab");
+  const networkTab = document.getElementById("network-tab");
+  const systemContent = document.getElementById("system-content");
+  const networkContent = document.getElementById("network-content");
+
+  function setTab(tabName) {
+    if (tabName === "network") {
+      networkContent.classList.remove("hidden");
+      systemContent.classList.add("hidden");
+      networkTab.className = "px-4 py-2 text-[var(--primaryColor)] border-b-2 border-[var(--primaryColor)] font-semibold bg-transparent";
+      systemTab.className = "px-4 py-2 text-[var(--txtHintColor)] bg-transparent";
+    } else {
+      systemContent.classList.remove("hidden");
+      networkContent.classList.add("hidden");
+      systemTab.className = "px-4 py-2 text-[var(--primaryColor)] border-b-2 border-[var(--primaryColor)] font-semibold bg-transparent";
+      networkTab.className = "px-4 py-2 text-[var(--txtHintColor)] bg-transparent";
+    }
+    setTimeout(resizeCharts, 100);
+  }
+
+  function updateUrlWithParams() {
+    const params = new URLSearchParams(window.location.search);
+    const activeTab = systemContent.classList.contains("hidden") ? "network" : "system";
+    params.set("tab", activeTab);
+    params.set("period", getCurrentPeriod());
+    params.set("memoryView", memoryView);
+    params.set("diskView", diskView);
+    window.history.replaceState({}, "", `${window.location.pathname}?${params}`);
+  }
+
+  function readParamsAndSetState() {
+    const params = new URLSearchParams(window.location.search);
+    const tab = params.get("tab");
+    const period = params.get("period");
+    const memView = params.get("memoryView");
+    const dskView = params.get("diskView");
+
+    setTab(tab || "system");
+
+    if (period) {
+      setPeriodDropdowns(period);
+    } else {
+      setPeriodDropdowns("day");
+    }
+
+    if (memView) {
+      document.getElementById("memory-view-selector").value = memView;
+      memoryView = memView;
+    }
+
+    if (dskView) {
+      document.getElementById("disk-view-selector").value = dskView;
+      diskView = dskView;
+    }
+  }
+
   document.querySelectorAll(".period-selector").forEach((sel) => {
     sel.addEventListener("change", (e) => {
       setPeriodDropdowns(e.target.value);
       fetchHistoricalStats(e.target.value);
+      updateUrlWithParams();
     });
   });
 
   document.getElementById("disk-view-selector").addEventListener("change", (e) => {
     diskView = e.target.value;
     fetchHistoricalStats(getCurrentPeriod());
+    updateUrlWithParams();
   });
 
   document.getElementById("memory-view-selector").addEventListener("change", (e) => {
     memoryView = e.target.value;
     fetchHistoricalStats(getCurrentPeriod());
+    updateUrlWithParams();
+  });
+
+  systemTab.addEventListener("click", () => {
+    setTab("system");
+    updateUrlWithParams();
+  });
+
+  networkTab.addEventListener("click", () => {
+    setTab("network");
+    updateUrlWithParams();
+  });
+
+  window.addEventListener("resize", resizeCharts);
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
+      setTimeout(resizeCharts, 50);
+    }
   });
 
   function initialize() {
+    readParamsAndSetState();
     fetchStats();
-    setPeriodDropdowns("day");
     fetchHistoricalStats(getCurrentPeriod());
     setInterval(fetchStats, 10000);
     setInterval(() => {
